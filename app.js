@@ -47,6 +47,11 @@ app.put('/images/:id', (req, res) => {
   res.json({ message: 'Image updated successfully', image: updatedImage });
 });
 
+// Default route
+app.get('/', (req, res) => {
+  res.send('Welcome to the Nature Images API!');
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
