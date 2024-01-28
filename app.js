@@ -22,13 +22,15 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Endpoint to retrieve all nature images
 app.get('/all-images', (req, res) => {
-  res.json({ images: natureImages });
+  const imagePaths = natureImages.map(image => ({ id: image.id, url: `/images/${image.filename}`, description: image.description }));
+  res.json(imagePaths);
 });
 
 // Endpoint to add a new nature image
 app.post('/images', (req, res) => {
   const newImage = req.body;
   // Assuming new images are added with a filename property
+  newImage.id = natureImages.length + 1;
   newImage.url = `/images/${newImage.filename}`;
   natureImages.push(newImage);
   res.json({ message: 'Image added successfully', image: newImage });
