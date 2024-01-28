@@ -20,10 +20,9 @@ const natureImages = [
 // Serve images through an endpoint
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-// Endpoint to retrieve nature images with full URLs
-app.get('/', (req, res) => {
-  const imagePaths = natureImages.map(image => `/images/${image.filename}`);
-  res.json(imagePaths);
+// Endpoint to retrieve all nature images
+app.get('/images', (req, res) => {
+  res.json(natureImages);
 });
 
 // Endpoint to add a new nature image
