@@ -28,7 +28,7 @@ app.get('/images', (req, res) => {
 app.post('/images', (req, res) => {
   const newImage = req.body;
   // Assuming new images are added with a filename property
-  newImage.url = `http://localhost:3000/images/${newImage.filename}`;
+  newImage.url = `http://localhost:${PORT}/images/${newImage.filename}`;
   natureImages.push(newImage);
   res.json({ message: 'Image added successfully', image: newImage });
 });
@@ -47,11 +47,6 @@ app.put('/images/:id', (req, res) => {
   res.json({ message: 'Image updated successfully', image: updatedImage });
 });
 
-// Default route
-app.get('/', (req, res) => {
-  res.send('Welcome to the Nature Images API!');
-});
-
-app.listen(PORT, () => {
+app.listen(PORT, host, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
