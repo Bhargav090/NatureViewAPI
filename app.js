@@ -17,12 +17,11 @@ const natureImages = [
 ];
 
 // Serve images through an endpoint
-app.use('/images', express.static(__dirname));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
-// Endpoint to retrieve nature images
-app.get('/', (req, res) => {
-  // Return only the list of image paths
-  const imagePaths = natureImages.map(image => `http://localhost:${PORT}/images/${image.filename}`);
+// Endpoint to retrieve nature images with full URLs
+app.get('/images', (req, res) => {
+  const imagePaths = natureImages.map(image => `https://rich-gray-lovebird-wear.cyclic.app/images/${image.filename}`);
   res.json(imagePaths);
 });
 
@@ -30,7 +29,7 @@ app.get('/', (req, res) => {
 app.post('/images', (req, res) => {
   const newImage = req.body;
   // Assuming new images are added with a filename property
-  newImage.url = `http://localhost:${PORT}/images/${newImage.filename}`;
+  newImage.url = `https://rich-gray-lovebird-wear.cyclic.app/images/${newImage.filename}`;
   natureImages.push(newImage);
   res.json({ message: 'Image added successfully', image: newImage });
 });
