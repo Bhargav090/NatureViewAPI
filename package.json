@@ -1,11 +1,11 @@
 {
   "name": "natureviewapi",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is an natureview images api",
   "scripts": {
             "start": "node app.js"
           }
-  "author": "",
+  "author": "BhargavPathivada",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
