@@ -12,9 +12,8 @@ app.use(cors());
 
 // Mock data for nature images
 const natureImages = [
-  { id: 1, filename: 'img1.jpg', description: 'Beautiful landscape'}
-  { id: 2, filename: 'img2.jpg', description: 'high landscape'
-  },
+  { id: 1, filename: 'img1.jpg', description: 'Beautiful landscape' },
+  { id: 2, filename: 'img2.jpg', description: 'High landscape' },
   // Add more images as needed
 ];
 
