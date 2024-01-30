@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const app = express();
-const fs = require('fs');
 const PORT = process.env.PORT || 3000;
 const host = '0.0.0.0';
 
@@ -24,14 +23,16 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // Endpoint to retrieve nature images with full URLs
 app.get('/', (req, res) => {
   try {
-    const imagePaths = natureImages.map(image => `/images/${image.filename}`);
+    const imagePaths = natureImages.map(image => ({
+      id: image.id,
+      url: `/images/${image.filename}`,
+    }));
     res.json(imagePaths);
   } catch (error) {
     console.error('Error in / endpoint:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
 
 // Endpoint to add a new nature image
 app.post('/images', (req, res) => {
