@@ -1,21 +1,31 @@
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-const imagesFolder = path.join(__dirname, 'images'); // Assuming images folder is in the same directory as app.js
+const imagesFolder = path.join(__dirname, 'images');
+const imagesJsonPath = path.join(__dirname, 'imagespath.json'); // Updated file name
 
+// Serve static files from the "images" directory
+app.use('/images', express.static(imagesFolder));
+
+// Your existing route for fetching image names
 app.get('/images', (req, res) => {
-    fs.readdir(imagesFolder, (err, files) => {
+    // Read image paths from the JSON file
+    fs.readFile(imagesJsonPath, 'utf8', (err, data) => {
         if (err) {
-            return res.status(500).json({ error: 'Error reading images folder.' });
+            return res.status(500).json({ error: 'Error reading images JSON file.' });
         }
 
-        const imageFiles = files.filter(file => /\.(jpg|jpeg|png)$/.test(file));
+        try {
+            const imageFiles = JSON.parse(data);
 
-        res.json({ images: imageFiles });
+            res.json({ images: imageFiles });
+        } catch (parseError) {
+            res.status(500).json({ error: 'Error parsing images JSON data.' });
+        }
     });
 });
 
