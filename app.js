@@ -1,38 +1,29 @@
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
-const app = express();
-const PORT = process.env.PORT || 3000;
-const host = '0.0.0.0';
+const fs = require('fs');
 
-app.use(cors());
+const app = express();
+const port = 3000; // Replace with your desired port
 
 // Serve images directly from the "images" folder
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-// Mock data for nature images
-const natureImages = [
-  { id: 1, description: 'Beautiful landscape' },
-  { id: 2, description: 'High landscape' },
-  { id: 3, description: 'Low landscape' },
-  // Add more images as needed
-];
-
-// Endpoint to retrieve nature images with full URLs
-app.get('/', (req, res) => {
+// Endpoint to retrieve image URLs and metadata
+app.get('/', async (req, res) => {
   try {
-    const imagePaths = natureImages.map(image => ({
-      id: image.id,
-      url: `/images/img${image.id}.jpg`, // assuming filenames follow img{id}.jpg pattern
-      description: image.description,
+    const imageFiles = fs.readdirSync(path.join(__dirname, 'images'));
+    const imagePaths = imageFiles.map(file => ({
+      filename: file,
+      // Add additional metadata as needed (e.g., size, dimensions, etc.)
+      url: `/images/${file}`
     }));
     res.json(imagePaths);
   } catch (error) {
-    console.error('Error in / endpoint:', error);
+    console.error('Error retrieving images:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
-app.listen(PORT, host, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
