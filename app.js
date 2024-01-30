@@ -1,40 +1,23 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const host = '0.0.0.0';
 
 app.use(cors());
 
-// Serve images directly through the /images endpoint
-app.use('/images', (req, res, next) => {
-  express.static(path.join(__dirname, 'images'))(req, res, err => {
-    if(err) {
-      console.error(err);
-      return res.status(500).send('Error serving static files');  
-    }
-    next();
-  });
-});
-
 // Mock data for nature images
 const natureImages = [
-  { id: 1, description: 'Beautiful landscape' },
-  { id: 2, description: 'High landscape' },
-  { id: 3, description: 'Low landscape' },
+  { id: 1, description: 'Beautiful landscape', url: 'https://rich-gray-lovebird-wear.cyclic.app/images/img1.jpg' },
+  { id: 2, description: 'High landscape', url: 'https://rich-gray-lovebird-wear.cyclic.app/images/img2.jpg' },
+  { id: 3, description: 'Low landscape', url: 'https://rich-gray-lovebird-wear.cyclic.app/images/flower1.jpg' },
   // Add more images as needed
 ];
 
 // Endpoint to retrieve nature images with full URLs
 app.get('/', (req, res) => {
   try {
-    const imagePaths = natureImages.map(image => ({
-      id: image.id,
-      url: `/images/img${image.id}.jpg`, // assuming filenames follow img{id}.jpg pattern
-      description: image.description,
-    }));
-    res.json(imagePaths);
+    res.json(natureImages);
   } catch (error) {
     console.error('Error in / endpoint:', error);
     res.status(500).json({ message: 'Internal Server Error' });
