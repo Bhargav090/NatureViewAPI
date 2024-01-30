@@ -8,7 +8,7 @@ const host = '0.0.0.0';
 app.use(cors());
 
 // Serve images directly through the /images endpoint
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(__dirname));
 
 // Mock data for nature images
 const natureImages = [
