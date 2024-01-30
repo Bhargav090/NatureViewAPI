@@ -1,31 +1,19 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
-const host = '0.0.0.0';
 
 app.use(cors());
 
-// Serve images directly through the /images endpoint
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(__dirname));
 
-// Mock data for nature images
-const natureImages = [
-  { id: 1, description: 'Beautiful landscape', filename: 'img1.jpg' },
-  { id: 2, description: 'High landscape', filename: 'img2.jpg' },
-  { id: 3, description: 'Low landscape', filename: 'flower1.jpg' },
-  // Add more images as needed
-];
-
-// Endpoint to retrieve nature images with full URLs
 app.get('/', (req, res) => {
   try {
-    const imagePaths = natureImages.map(image => ({
-      id: image.id,
-      url: `/images/${image.filename}`,
-      description: image.description,
-    }));
+    const imagePaths = [
+      '/images/img1.jpg',
+      '/images/img2.jpg',
+      '/images/flower1.jpg',
+    ]; // Add more images as needed
 
     res.json(imagePaths);
   } catch (error) {
@@ -34,6 +22,6 @@ app.get('/', (req, res) => {
   }
 });
 
-app.listen(PORT, host, () => {
+app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
