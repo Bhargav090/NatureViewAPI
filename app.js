@@ -10,23 +10,24 @@ app.use(cors());
 // Serve images directly through the /images endpoint
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+// Mock data for nature images
+const natureImages = [
+  { id: 1, description: 'Beautiful landscape', filename: 'img1.jpg' },
+  { id: 2, description: 'High landscape', filename: 'img2.jpg' },
+  { id: 3, description: 'Low landscape', filename: 'flower1.jpg' },
+  // Add more images as needed
+];
+
 // Endpoint to retrieve nature images with full URLs
 app.get('/', (req, res) => {
   try {
-    const imagePaths = [
-      { id: 1, description: 'Beautiful landscape', filename: 'img1.jpg' },
-      { id: 2, description: 'High landscape', filename: 'img2.jpg' },
-      { id: 3, description: 'Low landscape', filename: 'flower1.jpg' },
-      // Add more images as needed
-    ];
-
-    const images = imagePaths.map(image => ({
+    const imagePaths = natureImages.map(image => ({
       id: image.id,
       url: `/images/${image.filename}`,
       description: image.description,
     }));
 
-    res.json(images);
+    res.json(imagePaths);
   } catch (error) {
     console.error('Error in / endpoint:', error);
     res.status(500).json({ message: 'Internal Server Error' });
