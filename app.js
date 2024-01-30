@@ -14,7 +14,7 @@ app.use(cors());
 const natureImages = [
   { id: 1, filename: 'img1.jpg', description: 'Beautiful landscape' },
   { id: 2, filename: 'img2.jpg', description: 'High landscape' },
-  { id: 2, filename: 'flower1.jpg', description: 'low landscape' },
+  { id: 3, filename: 'flower1.jpg', description: 'Low landscape' },
   // Add more images as needed
 ];
 
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 // Endpoint to add a new nature image
 app.post('/images', (req, res) => {
   const newImage = req.body;
-  // Assuming new images are added with a filename property
+  newImage.id = natureImages.length + 1; // Assign a unique ID
   newImage.url = `/images/${newImage.filename}`;
   natureImages.push(newImage);
   res.json({ message: 'Image added successfully', image: newImage });
