@@ -1,34 +1,24 @@
 const express = require('express');
-const cors = require('cors');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = 3000;
 
-app.use(cors());
+const imagesFolder = path.join(__dirname, 'images'); // Assuming images folder is in the same directory as app.js
 
-const imagesDirectory = path.join(__dirname, 'images');
-app.use('/images', express.static(imagesDirectory));
+app.get('/images', (req, res) => {
+    fs.readdir(imagesFolder, (err, files) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error reading images folder.' });
+        }
 
-app.get('/', (req, res) => {
+        const imageFiles = files.filter(file => /\.(jpg|jpeg|png)$/.test(file));
 
-  const imagesFolder = './images';
-
-  fs.readdir(imagesFolder, (err, files) => {
-    if (err) {
-      return res.status(500).json({error: 'Failed to read images folder'});
-    }
-
-    const imagePaths = files.map(file => {
-      return `/images/${file}`; 
+        res.json({ images: imageFiles });
     });
-
-    res.json(imagePaths);
-
-  });
-
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
 });
