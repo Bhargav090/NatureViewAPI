@@ -18,7 +18,8 @@ const natureImages = [
 ];
 
 // Serve images through an endpoint
-app.use('/images', express.static(path.join(__dirname, 'images')));
+const absoluteImagesPath = path.join(__dirname, 'images');
+app.use('/images', express.static(absoluteImagesPath));
 
 // Endpoint to retrieve nature images with full URLs
 app.get('/', (req, res) => {
