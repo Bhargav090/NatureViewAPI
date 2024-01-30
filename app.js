@@ -23,9 +23,15 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Endpoint to retrieve nature images with full URLs
 app.get('/', (req, res) => {
-  const imagePaths = natureImages.map(image => `/images/${image.filename}`);
-  res.json(imagePaths);
+  try {
+    const imagePaths = natureImages.map(image => `/images/${image.filename}`);
+    res.json(imagePaths);
+  } catch (error) {
+    console.error('Error in / endpoint:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
+
 
 // Endpoint to add a new nature image
 app.post('/images', (req, res) => {
