@@ -8,7 +8,15 @@ const host = '0.0.0.0';
 app.use(cors());
 
 // Serve images directly through the /images endpoint
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', (req, res, next) => {
+  express.static(path.join(__dirname, 'images'))(req, res, err => {
+    if(err) {
+      console.error(err);
+      return res.status(500).send('Error serving static files');  
+    }
+    next();
+  });
+});
 
 // Mock data for nature images
 const natureImages = [
