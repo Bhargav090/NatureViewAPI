@@ -1,27 +1,30 @@
 const express = require('express');
-const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.get('/images', (req, res) => {
 
-app.use('/images', express.static(__dirname));
+  const imageFolder = './images';
 
-app.get('/', (req, res) => {
-  try {
-    const imagePaths = [
-      '/images/img1.jpg',
-      '/images/img2.jpg',
-      '/images/flower1.jpg',
-    ]; // Add more images as needed
+  fs.readdir(imageFolder, (err, files) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error getting images');
+    }
 
-    res.json(imagePaths);
-  } catch (error) {
-    console.error('Error in / endpoint:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
+    files.forEach(file => {
+      const filePath = path.join(imageFolder, file);
+      const buffer = fs.readFileSync(filePath);
+      res.write(buffer);
+    });
+
+    res.end();
+  });
+
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(3000, () => {
+  console.log('API listening on port 3000');
 });
