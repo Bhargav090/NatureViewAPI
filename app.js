@@ -1,44 +1,34 @@
 const express = require('express');
-const fs = require('fs');
+const cors = require('cors');
 const path = require('path');
-
+const fs = require('fs');
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Serve list of images
-app.get('/images', (req, res) => {
+app.use(cors());
 
-  const imageFolder = './images';
+const imagesDirectory = path.join(__dirname, 'images');
+app.use('/images', express.static(imagesDirectory));
 
-  fs.readdir(imageFolder, (err, files) => {
+app.get('/', (req, res) => {
+
+  const imagesFolder = './images';
+
+  fs.readdir(imagesFolder, (err, files) => {
     if (err) {
-      console.error(err);
-      res.status(500).send('Error getting images');
+      return res.status(500).json({error: 'Failed to read images folder'});
     }
 
-    res.json(files);
+    const imagePaths = files.map(file => {
+      return `/images/${file}`; 
+    });
+
+    res.json(imagePaths);
+
   });
 
 });
 
-// Serve individual image
-app.get('/images/:image', (req, res) => {
-  
-  const imageName = req.params.image;
-  const imagePath = path.join(__dirname, 'images', imageName);
-
-  fs.readFile(imagePath, (err, data) => {
-    if (err) {
-      res.status(404).send('Image not found'); 
-    } else {
-      res.write(data);
-      res.end();
-    }
-  });
-
-});
-
-// Start server 
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Image server listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
