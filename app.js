@@ -14,6 +14,7 @@ app.use(cors());
 const natureImages = [
   { id: 1, filename: 'img1.jpg', description: 'Beautiful landscape' },
   { id: 2, filename: 'img2.jpg', description: 'High landscape' },
+  { id: 2, filename: 'flower1.jpg', description: 'low landscape' },
   // Add more images as needed
 ];
 
