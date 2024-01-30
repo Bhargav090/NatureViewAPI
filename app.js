@@ -4,6 +4,7 @@ const path = require('path');
 
 const app = express();
 
+// Serve list of images
 app.get('/images', (req, res) => {
 
   const imageFolder = './images';
@@ -14,17 +15,30 @@ app.get('/images', (req, res) => {
       res.status(500).send('Error getting images');
     }
 
-    files.forEach(file => {
-      const filePath = path.join(imageFolder, file);
-      const buffer = fs.readFileSync(filePath);
-      res.write(buffer);
-    });
-
-    res.end();
+    res.json(files);
   });
 
 });
 
-app.listen(3000, () => {
-  console.log('API listening on port 3000');
+// Serve individual image
+app.get('/images/:image', (req, res) => {
+  
+  const imageName = req.params.image;
+  const imagePath = path.join(__dirname, 'images', imageName);
+
+  fs.readFile(imagePath, (err, data) => {
+    if (err) {
+      res.status(404).send('Image not found'); 
+    } else {
+      res.write(data);
+      res.end();
+    }
+  });
+
+});
+
+// Start server 
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Image server listening on port ${port}`);
 });
